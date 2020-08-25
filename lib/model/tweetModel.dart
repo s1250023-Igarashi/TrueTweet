@@ -1,4 +1,4 @@
-import 'UserModel.dart';
+import 'userModel.dart';
 
 class Tweet {
   User user;
