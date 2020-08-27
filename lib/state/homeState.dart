@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:true_tweet/model/tweetModel.dart';
-import 'package:true_tweet/model/UserModel.dart';
+import 'package:true_tweet/model/userModel.dart';
+import 'package:true_tweet/model/twitterApiModel.dart';
 import 'package:true_tweet/widget/composeTweet.dart';
 import 'package:true_tweet/widget/home.dart';
 import 'package:true_tweet/widget/profile.dart';
@@ -16,7 +17,7 @@ class HomeState extends State<Home> {
   var _bottomIndex = 0;
   var _theme = 0;
 
-  //INFO: Users
+  // Users
   static final geekmz = User(
     'Mariano Zorrilla',
     'geekmz',
@@ -37,82 +38,8 @@ class HomeState extends State<Home> {
       88675,
       true);
 
-  //INFO: Twts
-  final List<Tweet> _twts = [
-    Tweet(
-      flutterDev,
-      '#FlutterFriday\nis\nhere.\n\nRight pointing backhand indexYou can specify whether your Flutter '
-          'project uses Swift, Objective C, Kotlin, or Java by specifying:\n\n"--ios-language objc" or "--android-langu'
-          'age java" when you type "flutter create".\n\nElectric light bulbBy default new projects use Kotlin and '
-          'Swift.',
-      null,
-      15,
-      false,
-      38,
-      false,
-      244,
-      1587345183868,
-    ),
-    Tweet(
-      geekmz,
-      'This is a test twt to see how all this works, yay!',
-      null,
-      495,
-      false,
-      193,
-      false,
-      2,
-      1587343553550,
-    ),
-    Tweet(
-      flutterDev,
-      '⚡️Flutter is fast by default, but let\'s find out what might affect your app\'s performance.\n\nJoin '
-          '@filiphracek at #FlutterEurope as he walks the audience through an app with many performance issues, and '
-          'tries to address all of them.\n\nWatch here → https://goo.gle/2UPajJy',
-      'https://pbs.twimg.com/media/EUng32oVAAMhOwH?format=jpg&name=medium',
-      286,
-      false,
-      66,
-      false,
-      5,
-      1585852320000,
-    ),
-    Tweet(
-      geekmz,
-      'Well... this is a more longer twt, I\'m not sure if it works or not but, who knows, maybe it does',
-      null,
-      198,
-      false,
-      43,
-      false,
-      0,
-      1585751520000,
-    ),
-    Tweet(
-      geekmz,
-      'Meh, not much',
-      'https://miro.medium.com/max/1400/1*pFq49dtiBDpE5U4tySu-Hg.png',
-      34,
-      false,
-      4,
-      false,
-      0,
-      1585427520000,
-    ),
-    Tweet(
-      flutterDev,
-      'We are postponing the LATAM Roadshow. The health and safety of our community is our priority. We'
-          '\'ll be sure to update you as soon as we have more information.\n\n💙Thank you for keeping this community '
-          'thriving, and stay tuned!\n\n- The Flutter Team',
-      null,
-      150,
-      false,
-      20,
-      false,
-      3,
-      1585852320000,
-    ),
-  ];
+  // Tweets
+  List<Tweet> tweets = List<Tweet>();
 
   void _changeTheme(BuildContext buildContext, ThemeKeys key) {
     if (_themeState == null) {
@@ -130,15 +57,22 @@ class HomeState extends State<Home> {
     Future.delayed(Duration(seconds: 0), () {
       _changeTheme(context, ThemeKeys.LIGHT);
     });
+    load();
+    setState(() {});
+  }
+
+  Future<void> load() async {
+    tweets = await TwitterApi.getTimeLine();
   }
 
   Future<Null> _refresh() {
     return Future.delayed(Duration(milliseconds: 800), () {
+      load();
       setState(() {});
     });
   }
 
-  //INFO: Main Build
+  // Main Build
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -153,18 +87,18 @@ class HomeState extends State<Home> {
         child: ListView.builder(
           controller: _controller,
           itemBuilder: (context, index) {
-            final twt = _twts[index];
-            return _twtWidget(twt, size);
+            final Tweet tweet = tweets[index];
+            return _tweetWidget(tweet, size);
           },
-          itemCount: _twts.length,
+          itemCount: tweets.length,
         ),
       ),
       floatingActionButton: _fab(),
     );
   }
 
-  //INFO: Twt Item
-  Widget _twtWidget(Tweet twt, Size size) {
+  // Tweet
+  Widget _tweetWidget(Tweet tweet, Size size) {
     final smallDevice = size.width < 360;
     return Column(
       children: [
@@ -176,8 +110,8 @@ class HomeState extends State<Home> {
               GestureDetector(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => Profile(
-                    user: twt.user,
-                    list: _twts,
+                    user: tweet.user,
+                    list: tweets,
                     context: context,
                     themeState: _themeState,
                   ),
@@ -188,7 +122,7 @@ class HomeState extends State<Home> {
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(smallDevice ? 20 : 25)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(25),
-                    child: Image.network(twt.user.avatar, fit: BoxFit.cover),
+                    child: Image.network(tweet.user.avatar, fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -201,10 +135,10 @@ class HomeState extends State<Home> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(twt.user.name,
+                        Text(tweet.user.name,
                             style: TextStyle(fontWeight: FontWeight.w600, fontSize: smallDevice ? 12 : 14)),
                         Visibility(
-                          visible: twt.user.verified,
+                          visible: tweet.user.verified,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -223,7 +157,7 @@ class HomeState extends State<Home> {
                         Opacity(
                             opacity: 0.6,
                             child: Text(
-                              '@${twt.user.username}',
+                              '@${tweet.user.username}',
                               style: TextStyle(fontSize: smallDevice ? 12 : 14),
                             )),
                         SizedBox(width: 5),
@@ -234,19 +168,19 @@ class HomeState extends State<Home> {
                         SizedBox(width: 5),
                         Opacity(
                             opacity: 0.6,
-                            child: Text(timeAgo(twt.timestamp), style: TextStyle(fontSize: smallDevice ? 12 : 14))),
+                            child: Text(tweet.timestamp, style: TextStyle(fontSize: smallDevice ? 12 : 14))),
                       ],
                     ),
                     SizedBox(height: 4),
-                    Text(twt.twt, style: TextStyle(fontSize: smallDevice ? 12 : 14)),
-                    if (twt.image != null)
+                    Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14)),
+                    if (tweet.image != null)
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(height: 8),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(twt.image, fit: BoxFit.fitWidth),
+                            child: Image.network(tweet.image, fit: BoxFit.fitWidth),
                           ),
                         ],
                       ),
@@ -263,21 +197,21 @@ class HomeState extends State<Home> {
                               width: 15,
                             ),
                             SizedBox(width: 8),
-                            Text('${twt.comments}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
+                            Text('${tweet.comments}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
                           ],
                         ),
                         InkResponse(
-                          onTap: twt.retwted
+                          onTap: tweet.retweeted
                               ? () {
                             setState(() {
-                              twt.retwts = twt.retwts - 1;
-                              twt.retwted = false;
+                              tweet.retweets = tweet.retweets - 1;
+                              tweet.retweeted = false;
                             });
                           }
                               : () {
                             setState(() {
-                              twt.retwts = twt.retwts + 1;
-                              twt.retwted = true;
+                              tweet.retweets = tweet.retweets + 1;
+                              tweet.retweeted = true;
                             });
                           },
                           child: Row(
@@ -285,26 +219,26 @@ class HomeState extends State<Home> {
                             children: [
                               Image.network(
                                 'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                    '.com/o/twtr%2F${twt.retwted ? 'retwt_selected' : 'retwt'}.png?alt=media',
+                                    '.com/o/twtr%2F${tweet.retweeted ? 'retwt_selected' : 'retwt'}.png?alt=media',
                                 width: 15,
                               ),
                               SizedBox(width: 8),
-                              Text('${twt.retwts}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
+                              Text('${tweet.retweets}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
                             ],
                           ),
                         ),
                         InkResponse(
-                          onTap: twt.liked
+                          onTap: tweet.liked
                               ? () {
                             setState(() {
-                              twt.likes = twt.likes - 1;
-                              twt.liked = false;
+                              tweet.likes = tweet.likes - 1;
+                              tweet.liked = false;
                             });
                           }
                               : () {
                             setState(() {
-                              twt.likes = twt.likes + 1;
-                              twt.liked = true;
+                              tweet.likes = tweet.likes + 1;
+                              tweet.liked = true;
                             });
                           },
                           child: Row(
@@ -312,11 +246,11 @@ class HomeState extends State<Home> {
                             children: [
                               Image.network(
                                 'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                    '.com/o/twtr%2F${twt.liked ? 'liked' : 'like'}.png?alt=media',
+                                    '.com/o/twtr%2F${tweet.liked ? 'liked' : 'like'}.png?alt=media',
                                 width: 15,
                               ),
                               SizedBox(width: 8),
-                              Text('${twt.likes}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
+                              Text('${tweet.likes}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
                             ],
                           ),
                         ),
@@ -358,7 +292,7 @@ class HomeState extends State<Home> {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            Profile(user: geekmz, list: _twts, context: context, themeState: _themeState),
+                            Profile(user: geekmz, list: tweets, context: context, themeState: _themeState),
                       ));
                     },
                     child: Container(
@@ -520,12 +454,12 @@ class HomeState extends State<Home> {
       foregroundColor: Theme.of(context).accentColor,
       backgroundColor: Theme.of(context).accentColor,
       onPressed: () async {
-        var twt = await Navigator.of(context).push(MaterialPageRoute(
+        var tweet = await Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ComposeTweet(context: context, user: geekmz),
           fullscreenDialog: true,
         ));
-        if (twt != null) {
-          setState(() => _twts.insert(0, twt));
+        if (tweet != null) {
+          setState(() => tweets.insert(0, tweet));
         }
       },
       child: Padding(
@@ -786,24 +720,5 @@ class HomeState extends State<Home> {
       },
       backgroundColor: Colors.transparent,
     );
-  }
-
-  static String timeAgo(int timestamp) {
-    final currentTime = DateTime.now().millisecondsSinceEpoch;
-    final timeDiff = currentTime - timestamp;
-    if (timeDiff >= (1000 * 60 * 60 * 24)) {
-      // Days
-      return '${timeDiff ~/ (1000 * 60 * 60 * 24)}d';
-    } else if (timeDiff >= (1000 * 60 * 60)) {
-      // Hours
-      return '${timeDiff ~/ (1000 * 60 * 60)}h';
-    } else if (timeDiff >= (1000 * 60)) {
-      // Minutes
-      return '${timeDiff ~/ (1000 * 60)}m';
-    } else if (timeDiff >= 1000) {
-      // Seconds
-      return '${timeDiff ~/ 1000}s';
-    }
-    return '0s';
   }
 }

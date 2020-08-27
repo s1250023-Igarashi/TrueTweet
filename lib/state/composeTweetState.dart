@@ -37,7 +37,7 @@ class ComposeTweetState extends State<ComposeTweet> {
                       0,
                       false,
                       0,
-                      DateTime.now().millisecondsSinceEpoch,
+                      DateTime.now().millisecondsSinceEpoch.toString(),
                     ));
                   }
                       : null,

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:true_tweet/model/tweetModel.dart';
-import 'package:true_tweet/model/UserModel.dart';
+import 'package:true_tweet/model/userModel.dart';
 import 'package:true_tweet/state/profileState.dart';
 
 import '../theme.dart';
