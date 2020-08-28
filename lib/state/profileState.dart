@@ -128,7 +128,7 @@ class ProfileState extends State<Profile> {
                   .followedBy(widget.list
                   .where((item) => item.user.username == widget.user.username)
                   .toList()
-                  .map((twt) => _twtWidget(twt, smallDevice)))
+                  .map((tweet) => _tweetWidget(tweet, smallDevice)))
                   .toList()),
           PreferredSize(
             preferredSize: Size(size.width, 50),
@@ -176,8 +176,8 @@ class ProfileState extends State<Profile> {
     );
   }
 
-  //INFO: Profile Twt Item
-  Widget _twtWidget(Tweet twt, bool smallDevice) {
+  //INFO: Profile tweet Item
+  Widget _tweetWidget(Tweet tweet, bool smallDevice) {
     return Container(
       child: Column(
         children: [
@@ -192,7 +192,7 @@ class ProfileState extends State<Profile> {
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(smallDevice ? 20 : 25)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(smallDevice ? 20 : 25),
-                    child: Image.network(twt.user.avatar, fit: BoxFit.cover),
+                    child: Image.network(tweet.user.avatar, fit: BoxFit.cover),
                   ),
                 ),
                 SizedBox(width: 12),
@@ -204,10 +204,10 @@ class ProfileState extends State<Profile> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(twt.user.name,
+                          Text(tweet.user.name,
                               style: TextStyle(fontWeight: FontWeight.w600, fontSize: smallDevice ? 12 : 14)),
                           Visibility(
-                            visible: twt.user.verified,
+                            visible: tweet.user.verified,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -215,7 +215,7 @@ class ProfileState extends State<Profile> {
                                 if (widget.themeState != null)
                                   Image.network(
                                     'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                        '.com/o/twtr%2F${widget.themeState.isDart ? 'verified_white' : 'verified_blue'}'
+                                        '.com/o/tweetr%2F${widget.themeState.isDart ? 'verified_white' : 'verified_blue'}'
                                         '.png?alt=media',
                                     width: 15,
                                   )
@@ -225,7 +225,7 @@ class ProfileState extends State<Profile> {
                           SizedBox(width: 5),
                           Opacity(
                               opacity: 0.6,
-                              child: Text('@${twt.user.username}', style: TextStyle(fontSize: smallDevice ? 12 : 14))),
+                              child: Text('@${tweet.user.username}', style: TextStyle(fontSize: smallDevice ? 12 : 14))),
                           SizedBox(width: 5),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8),
@@ -234,20 +234,20 @@ class ProfileState extends State<Profile> {
                           SizedBox(width: 5),
                           Opacity(
                               opacity: 0.6,
-                              child: Text(HomeState.timeAgo(twt.timestamp),
+                              child: Text(tweet.timestamp,
                                   style: TextStyle(fontSize: smallDevice ? 12 : 14))),
                         ],
                       ),
                       SizedBox(height: 4),
-                      Text(twt.twt, style: TextStyle(fontSize: smallDevice ? 12 : 14)),
-                      if (twt.image != null)
+                      Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14)),
+                      if (tweet.image != null)
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             SizedBox(height: 8),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(twt.image, fit: BoxFit.fitWidth),
+                              child: Image.network(tweet.image, fit: BoxFit.fitWidth),
                             ),
                           ],
                         ),
@@ -260,25 +260,25 @@ class ProfileState extends State<Profile> {
                             children: [
                               Image.network(
                                 'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                    '.com/o/twtr%2Fcomment.png?alt=media',
+                                    '.com/o/tweetr%2Fcomment.png?alt=media',
                                 width: 15,
                               ),
                               SizedBox(width: 8),
-                              Text('${twt.comments}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
+                              Text('${tweet.comments}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
                             ],
                           ),
                           InkResponse(
-                            onTap: twt.retwted
+                            onTap: tweet.retweeted
                                 ? () {
                               setState(() {
-                                twt.retwts = twt.retwts - 1;
-                                twt.retwted = false;
+                                tweet.retweets = tweet.retweets - 1;
+                                tweet.retweeted = false;
                               });
                             }
                                 : () {
                               setState(() {
-                                twt.retwts = twt.retwts + 1;
-                                twt.retwted = true;
+                                tweet.retweets = tweet.retweets + 1;
+                                tweet.retweeted = true;
                               });
                             },
                             child: Row(
@@ -286,26 +286,26 @@ class ProfileState extends State<Profile> {
                               children: [
                                 Image.network(
                                   'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                      '.com/o/twtr%2F${twt.retwted ? 'retwt_selected' : 'retwt'}.png?alt=media',
+                                      '.com/o/tweetr%2F${tweet.retweeted ? 'retweet_selected' : 'retweet'}.png?alt=media',
                                   width: 15,
                                 ),
                                 SizedBox(width: 8),
-                                Text('${twt.retwts}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
+                                Text('${tweet.retweets}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
                               ],
                             ),
                           ),
                           InkResponse(
-                            onTap: twt.liked
+                            onTap: tweet.liked
                                 ? () {
                               setState(() {
-                                twt.likes = twt.likes - 1;
-                                twt.liked = false;
+                                tweet.likes = tweet.likes - 1;
+                                tweet.liked = false;
                               });
                             }
                                 : () {
                               setState(() {
-                                twt.likes = twt.likes + 1;
-                                twt.liked = true;
+                                tweet.likes = tweet.likes + 1;
+                                tweet.liked = true;
                               });
                             },
                             child: Row(
@@ -313,17 +313,17 @@ class ProfileState extends State<Profile> {
                               children: [
                                 Image.network(
                                   'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                      '.com/o/twtr%2F${twt.liked ? 'liked' : 'like'}.png?alt=media',
+                                      '.com/o/tweetr%2F${tweet.liked ? 'liked' : 'like'}.png?alt=media',
                                   width: 15,
                                 ),
                                 SizedBox(width: 8),
-                                Text('${twt.likes}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
+                                Text('${tweet.likes}', style: TextStyle(fontSize: smallDevice ? 12 : 14))
                               ],
                             ),
                           ),
                           Image.network(
                             'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                '.com/o/twtr%2Fshare.png?alt=media',
+                                '.com/o/tweetr%2Fshare.png?alt=media',
                             width: 15,
                           ),
                           SizedBox()

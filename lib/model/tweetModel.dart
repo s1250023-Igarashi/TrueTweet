@@ -1,16 +1,16 @@
-import 'UserModel.dart';
+import 'userModel.dart';
 
 class Tweet {
   User user;
-  String twt;
+  String tweet;
   String image;
   int likes;
-  int retwts;
+  int retweets;
   int comments;
-  int timestamp;
-  bool retwted;
+  String timestamp;
+  bool retweeted;
   bool liked;
 
-  Tweet(this.user, this.twt, this.image, this.likes, this.liked, this.retwts, this.retwted, this.comments,
+  Tweet(this.user, this.tweet, this.image, this.likes, this.liked, this.retweets, this.retweeted, this.comments,
       this.timestamp);
 }
