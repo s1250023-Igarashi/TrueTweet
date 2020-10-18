@@ -39,7 +39,75 @@ class HomeState extends State<Home> {
       true);
 
   // Tweets
-  List<Tweet> tweets = List<Tweet>();
+  // List<Tweet> tweets = List<Tweet>();
+  final List<Tweet> tweets = [
+    Tweet(
+      flutterDev,
+      'content1',
+      null,
+      15,
+      false,
+      38,
+      false,
+      244,
+      '1h',
+    ),
+    Tweet(
+      geekmz,
+      'content2\n\nthis is likely to be misleading information',
+      null,
+      495,
+      false,
+      193,
+      false,
+      2,
+      '2h',
+    ),
+    Tweet(
+      flutterDev,
+      'content3',
+      null,
+      286,
+      false,
+      66,
+      false,
+      5,
+      '3h',
+    ),
+    Tweet(
+      geekmz,
+      'content4',
+      null,
+      198,
+      false,
+      43,
+      false,
+      0,
+      '4h',
+    ),
+    Tweet(
+      geekmz,
+      'content5',
+      null,
+      34,
+      false,
+      4,
+      false,
+      0,
+      '5h',
+    ),
+    Tweet(
+      flutterDev,
+      'content6',
+      null,
+      150,
+      false,
+      20,
+      false,
+      3,
+      '6h',
+    ),
+  ];
 
   void _changeTheme(BuildContext buildContext, ThemeKeys key) {
     if (_themeState == null) {
@@ -62,7 +130,7 @@ class HomeState extends State<Home> {
   }
 
   Future<void> load() async {
-    tweets = await TwitterApi.getTimeLine();
+    // tweets = await TwitterApi.getTimeLine();
   }
 
   Future<Null> _refresh() {
