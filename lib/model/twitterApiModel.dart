@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:true_tweet/model/userModel.dart';
 import 'package:twitter_1user/twitter_1user.dart';
 import 'tweetModel.dart';
@@ -45,5 +46,13 @@ class TwitterApi {
     }
 
     return tweets;
+  }
+
+  static Future<int> getUserId(String username) async {
+    Twitter twitter = new Twitter(apiKey, apiSecret, accessToken, accessSecret);
+
+    String response = await twitter.request('get', 'users/by/username/' + username, {});
+
+    return int.parse(jsonDecode(response)['data']['id']);
   }
 }
