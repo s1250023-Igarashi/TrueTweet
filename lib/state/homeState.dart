@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:true_tweet/model/tweetModel.dart';
 import 'package:true_tweet/model/userModel.dart';
 import 'package:true_tweet/model/twitterApiModel.dart';
+import 'package:true_tweet/userSession.dart';
 import 'package:true_tweet/widget/composeTweet.dart';
 import 'package:true_tweet/widget/home.dart';
 import 'package:true_tweet/widget/profile.dart';
@@ -16,6 +17,8 @@ class HomeState extends State<Home> {
   var _scaffold = GlobalKey<ScaffoldState>();
   var _bottomIndex = 0;
   var _theme = 0;
+
+  int userId = UserSession.getUserId() as int;
 
   // Users
   static final geekmz = User(
