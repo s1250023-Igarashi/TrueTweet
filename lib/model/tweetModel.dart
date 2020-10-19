@@ -10,7 +10,8 @@ class Tweet {
   String timestamp;
   bool retweeted;
   bool liked;
+  bool misinformation;
 
   Tweet(this.user, this.tweet, this.image, this.likes, this.liked, this.retweets, this.retweeted, this.comments,
-      this.timestamp);
+      this.timestamp, this.misinformation);
 }

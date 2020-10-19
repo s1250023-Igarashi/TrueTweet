@@ -38,7 +38,8 @@ class TwitterApi {
           tweetsJson[i]['retweet_count'],
           tweetsJson[i]['retweeted'],
           tweetsJson[i]['reply_count'],
-          '' // TODO: Timestamp
+          '', // TODO: Timestamp
+          false // TODO: Misinformation
       );
 
       tweets.add(tweet);
