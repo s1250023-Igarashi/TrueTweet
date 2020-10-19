@@ -284,32 +284,39 @@ class HomeState extends State<Home> {
                             });
                           }
                               : () {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return CupertinoAlertDialog(
-                                  title: Text("Warning"),
-                                  content: Text("This tweet is likely to be misinformation"),
-                                  actions: <Widget>[
-                                    CupertinoDialogAction(
-                                      child: Text("Retweet"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        setState(() {
-                                          tweet.retweets = tweet.retweets + 1;
-                                          tweet.retweeted = true;
-                                        });
-                                      },
-                                    ),
-                                    CupertinoDialogAction(
-                                      child: Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold)),
-                                      onPressed: () => Navigator.of(context).pop(),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                            if (tweet.misinformation) {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return CupertinoAlertDialog(
+                                    title: Text("Warning"),
+                                    content: Text("This tweet is likely to be misinformation"),
+                                    actions: <Widget>[
+                                      CupertinoDialogAction(
+                                        child: Text("Retweet"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          setState(() {
+                                            tweet.retweets = tweet.retweets + 1;
+                                            tweet.retweeted = true;
+                                          });
+                                        },
+                                      ),
+                                      CupertinoDialogAction(
+                                        child: Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              setState(() {
+                                tweet.retweets = tweet.retweets + 1;
+                                tweet.retweeted = true;
+                              });
+                            }
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
