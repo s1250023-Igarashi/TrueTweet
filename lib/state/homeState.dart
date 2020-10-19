@@ -51,6 +51,7 @@ class HomeState extends State<Home> {
       false,
       244,
       '1h',
+      false,
     ),
     Tweet(
       geekmz,
@@ -62,6 +63,7 @@ class HomeState extends State<Home> {
       false,
       2,
       '2h',
+      true,
     ),
     Tweet(
       flutterDev,
@@ -73,6 +75,7 @@ class HomeState extends State<Home> {
       false,
       5,
       '3h',
+      false,
     ),
     Tweet(
       geekmz,
@@ -84,6 +87,7 @@ class HomeState extends State<Home> {
       false,
       0,
       '4h',
+      false,
     ),
     Tweet(
       geekmz,
@@ -95,6 +99,7 @@ class HomeState extends State<Home> {
       false,
       0,
       '5h',
+      false,
     ),
     Tweet(
       flutterDev,
@@ -106,6 +111,7 @@ class HomeState extends State<Home> {
       false,
       3,
       '6h',
+      false,
     ),
   ];
 
@@ -171,6 +177,7 @@ class HomeState extends State<Home> {
     return Column(
       children: [
         Container(
+          color: tweet.misinformation && tweet.retweeted ? Colors.yellow : Colors.white,
           padding: const EdgeInsets.all(12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,7 +247,7 @@ class HomeState extends State<Home> {
                       ],
                     ),
                     SizedBox(height: 4),
-                    Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14)),
+                    Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14, color: tweet.misinformation && !tweet.retweeted ? Colors.grey : Colors.black)),
                     if (tweet.image != null)
                       Column(
                         mainAxisSize: MainAxisSize.min,
