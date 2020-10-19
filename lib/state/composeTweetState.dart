@@ -28,18 +28,55 @@ class ComposeTweetState extends State<ComposeTweet> {
                   ),
                   onPressed: _controller.text.isNotEmpty
                       ? () {
-                    Navigator.of(context).pop(Tweet(
-                      widget.user,
-                      _controller.text,
-                      null,
-                      0,
-                      false,
-                      0,
-                      false,
-                      0,
-                      DateTime.now().millisecondsSinceEpoch.toString(),
-                      false,
-                    ));
+                    if (true) { // TODO: Judge
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return CupertinoAlertDialog(
+                            title: Text("Warning"),
+                            content: Text("This tweet is likely to be misinformation"),
+                            actions: <Widget>[
+                              CupertinoDialogAction(
+                                child: Text("Tweet"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop(Tweet(
+                                    widget.user,
+                                    _controller.text,
+                                    null,
+                                    0,
+                                    false,
+                                    0,
+                                    false,
+                                    0,
+                                    'just now',
+                                    true,
+                                  ));
+                                },
+                              ),
+                              CupertinoDialogAction(
+                                child: Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold)),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      Navigator.of(context).pop(Tweet(
+                        widget.user,
+                        _controller.text,
+                        null,
+                        0,
+                        false,
+                        0,
+                        false,
+                        0,
+                        DateTime.now().millisecondsSinceEpoch.toString(),
+                        false,
+                      ));
+                    }
                   }
                       : null,
                   child: Text('Tweet', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
