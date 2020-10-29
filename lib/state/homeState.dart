@@ -18,31 +18,41 @@ class HomeState extends State<Home> {
   var _theme = 0;
 
   // Users
-  static final geekmz = User(
-    'Mariano Zorrilla',
-    'geekmz',
-    'https://avatars2.githubusercontent.com/u/3221810?s=460&u=34b460f73429f22414f7b078ec2edcb40d580aa8&v=4',
-    'https://pbs.twimg.com/profile_banners/968284418/1578616922/1500x500',
-    'Flutter developer. I create clone apps and much more! 👨‍💻',
-    248,
-    1480,
+  static final loginUser = User(
+    'Login User',
+    'LoginUser',
+    'https://etoile.lix.jp/wp-content/uploads/2018/12/%E9%9D%92-1-150x150.jpg',
+    '',
+    'I am using this client',
+    46,
+    31,
     false,
   );
-  static final flutterDev = User(
-      'Flutter',
-      'FlutterDev',
-      'https://pbs.twimg.com/profile_images/1187814172307800064/MhnwJbxw_400x400.jpg',
-      'https://pbs.twimg.com/profile_banners/420730316/1578350457/1500x500',
-      'Google’s UI toolkit to build apps for mobile, web, & desktop from a single codebase //',
-      35,
-      88675,
-      true);
+  static final alice = User(
+    'Alice',
+    'alice',
+    'https://etoile.lix.jp/wp-content/uploads/2018/12/%E8%B5%A4-150x150.jpg',
+    '',
+    '',
+    14,
+    13,
+    false,
+  );
+  static final bob = User(
+      'Bob',
+      'bob',
+      'https://etoile.lix.jp/wp-content/uploads/2018/12/%E6%B5%85%E7%B8%B9-150x150.jpg',
+      '',
+      '',
+      8,
+      34,
+      false);
 
   // Tweets
   // List<Tweet> tweets = List<Tweet>();
   final List<Tweet> tweets = [
     Tweet(
-      flutterDev,
+      bob,
       'content1',
       null,
       15,
@@ -54,7 +64,7 @@ class HomeState extends State<Home> {
       false,
     ),
     Tweet(
-      geekmz,
+      alice,
       'content2\n\nthis is likely to be misleading information',
       null,
       495,
@@ -66,7 +76,7 @@ class HomeState extends State<Home> {
       true,
     ),
     Tweet(
-      flutterDev,
+      bob,
       'content3',
       null,
       286,
@@ -78,7 +88,7 @@ class HomeState extends State<Home> {
       false,
     ),
     Tweet(
-      geekmz,
+      alice,
       'content4',
       null,
       198,
@@ -90,7 +100,7 @@ class HomeState extends State<Home> {
       false,
     ),
     Tweet(
-      geekmz,
+      loginUser,
       'content5',
       null,
       34,
@@ -102,7 +112,7 @@ class HomeState extends State<Home> {
       false,
     ),
     Tweet(
-      flutterDev,
+      bob,
       'content6',
       null,
       150,
@@ -177,7 +187,7 @@ class HomeState extends State<Home> {
     return Column(
       children: [
         Container(
-          color: tweet.misinformation && tweet.retweeted ? Colors.yellow : Colors.white,
+          color: tweet.misinformation && (tweet.retweeted || tweet.user == loginUser) ? Colors.yellow : Colors.white,
           padding: const EdgeInsets.all(12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,7 +257,7 @@ class HomeState extends State<Home> {
                       ],
                     ),
                     SizedBox(height: 4),
-                    Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14, color: tweet.misinformation && !tweet.retweeted ? Colors.grey : Colors.black)),
+                    Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14, color: tweet.misinformation && (!tweet.retweeted && tweet.user != loginUser) ? Colors.grey : Colors.black)),
                     if (tweet.image != null)
                       Column(
                         mainAxisSize: MainAxisSize.min,
@@ -396,7 +406,7 @@ class HomeState extends State<Home> {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            Profile(user: geekmz, list: tweets, context: context, themeState: _themeState),
+                            Profile(user: loginUser, list: tweets, context: context, themeState: _themeState),
                       ));
                     },
                     child: Container(
@@ -406,21 +416,21 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child: Image.network(geekmz.avatar, fit: BoxFit.cover),
+                        child: Image.network(loginUser.avatar, fit: BoxFit.cover),
                       ),
                     ),
                   ),
                   SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(geekmz.name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                    child: Text(loginUser.name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                   ),
                   SizedBox(height: 4),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Opacity(
                       opacity: 0.6,
-                      child: Text('@${geekmz.username}'),
+                      child: Text('@${loginUser.username}'),
                     ),
                   ),
                   SizedBox(height: 14),
@@ -429,11 +439,11 @@ class HomeState extends State<Home> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('${geekmz.following}', style: TextStyle(fontWeight: FontWeight.w600)),
+                        Text('${loginUser.following}', style: TextStyle(fontWeight: FontWeight.w600)),
                         SizedBox(width: 2),
                         Opacity(opacity: 0.6, child: Text('Following')),
                         SizedBox(width: 15),
-                        Text('${geekmz.followers}', style: TextStyle(fontWeight: FontWeight.w600)),
+                        Text('${loginUser.followers}', style: TextStyle(fontWeight: FontWeight.w600)),
                         SizedBox(width: 2),
                         Opacity(opacity: 0.6, child: Text('Followers')),
                       ],
@@ -559,7 +569,7 @@ class HomeState extends State<Home> {
       backgroundColor: Theme.of(context).accentColor,
       onPressed: () async {
         var tweet = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ComposeTweet(context: context, user: geekmz),
+          builder: (context) => ComposeTweet(context: context, user: loginUser),
           fullscreenDialog: true,
         ));
         if (tweet != null) {
@@ -671,7 +681,7 @@ class HomeState extends State<Home> {
                       height: 30,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: Image.network(geekmz.avatar, fit: BoxFit.cover),
+                        child: Image.network(loginUser.avatar, fit: BoxFit.cover),
                       ),
                     ),
                   ),
