@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:true_tweet/model/userModel.dart';
+import 'package:true_tweet/service/tweetService.dart';
 import 'package:twitter_1user/twitter_1user.dart';
 import 'tweetModel.dart';
 
@@ -39,7 +40,7 @@ class TwitterApi {
           tweetsJson[i]['retweeted'],
           tweetsJson[i]['reply_count'],
           '', // TODO: Timestamp
-          false // TODO: Misinformation
+          await TweetService.containMisLeadingContent(tweetsJson[i]['text'])
       );
 
       tweets.add(tweet);
