@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:true_tweet/model/tweetModel.dart';
+import 'package:true_tweet/service/tweetService.dart';
 import 'package:true_tweet/widget/composeTweet.dart';
 
 class ComposeTweetState extends State<ComposeTweet> {
@@ -27,8 +28,8 @@ class ComposeTweetState extends State<ComposeTweet> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                   onPressed: _controller.text.isNotEmpty
-                      ? () {
-                    if (true) { // TODO: Judge
+                      ? () async {
+                    if (await TweetService.containMisLeadingContent(_controller.text)) {
                       showDialog(
                         context: context,
                         barrierDismissible: false,
