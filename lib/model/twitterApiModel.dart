@@ -40,10 +40,10 @@ class TwitterApi {
           tweetsJson[i]['retweeted'],
           tweetsJson[i]['reply_count'],
           '', // TODO: Timestamp
-          await TweetService.containMisLeadingContent(tweetsJson[i]['text'])
+          false
       );
 
-      tweets.add(tweet);
+      if (await TweetService.setMisinformationAndGetNumberOfCorrections(tweet, tweetsJson[i]['text']) < 100) tweets.add(tweet); // TODO: 100 is tentative
     }
 
     return tweets;
