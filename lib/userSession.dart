@@ -11,4 +11,14 @@ class UserSession {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getInt('user_id');
   }
+
+  void setHidingCriteria(int criteria) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setInt('criteria', criteria);
+  }
+
+  Future<int> getHidingCriteria() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getInt('criteria');
+  }
 }
