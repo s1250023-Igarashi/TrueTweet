@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:true_tweet/model/userModel.dart';
 import 'package:true_tweet/service/tweetService.dart';
 import 'package:twitter_1user/twitter_1user.dart';
+import '../userSession.dart';
 import 'tweetModel.dart';
 
 class TwitterApi {
@@ -43,7 +44,7 @@ class TwitterApi {
           false
       );
 
-      if (await TweetService.setMisinformationAndGetNumberOfCorrections(tweet, tweetsJson[i]['text']) < 100) tweets.add(tweet); // TODO: 100 is tentative
+      if (await TweetService.setMisinformationAndGetNumberOfCorrections(tweet, tweetsJson[i]['text']) < await UserSession().getHidingCriteria()) tweets.add(tweet);
     }
 
     return tweets;
