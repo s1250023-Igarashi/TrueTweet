@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:true_tweet/model/tweetModel.dart';
 import 'package:true_tweet/model/userModel.dart';
 import 'package:true_tweet/model/twitterApiModel.dart';
+import 'package:true_tweet/userSession.dart';
 import 'package:true_tweet/widget/composeTweet.dart';
 import 'package:true_tweet/widget/home.dart';
 import 'package:true_tweet/widget/profile.dart';
@@ -389,6 +390,7 @@ class HomeState extends State<Home> {
 
   Widget _drawer(Size size) {
     final smallDevice = size.width < 360;
+    double _currentHidingCriteria = 100;
     return Container(
       width: smallDevice ? 240 : 280,
       height: size.height,
@@ -524,6 +526,25 @@ class HomeState extends State<Home> {
                     child: Text('Help Center', style: TextStyle(fontSize: smallDevice ? 14 : 18)),
                   ),
                   SizedBox(height: 24),
+                  Container(height: 1, color: Theme.of(context).selectedRowColor),
+                  SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Filtering Level', style: TextStyle(fontSize: smallDevice ? 14 : 18)),
+                  ),
+                  Slider( // TODO: range is tentative
+                    label: _currentHidingCriteria.round().toString(),
+                    min: 0,
+                    max: 100,
+                    value: _currentHidingCriteria,
+                    divisions: 10,
+                    onChanged: (double value){
+                      setState(() {
+                        _currentHidingCriteria = value;
+                        UserSession().setHidingCriteria(_currentHidingCriteria.round());
+                      });
+                    },
+                  )
                 ],
               ),
             ),
