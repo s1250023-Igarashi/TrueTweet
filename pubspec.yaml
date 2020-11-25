@@ -26,6 +26,8 @@ dependencies:
   shared_preferences: ^0.5.4+5
   twitter_1user: ^1.0.1
   string_similarity: ^1.1.0
+  oauth1: ^1.0.4
+  url_launcher: ^3.0.3
 
 
   # The following adds the Cupertino Icons font to your application.

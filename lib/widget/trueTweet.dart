@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:true_tweet/widget/login.dart';
 
 import '../theme.dart';
 import 'home.dart';
@@ -11,7 +12,7 @@ class TrueTweet extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'TrueTweet',
       theme: CustomTheme.of(context),
-      home: Home(),
+      home: Login(),
     );
   }
 }

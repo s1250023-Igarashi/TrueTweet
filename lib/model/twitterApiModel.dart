@@ -1,15 +1,30 @@
 import 'dart:convert';
 
+import 'package:oauth1/oauth1.dart' as oauth1;
 import 'package:true_tweet/model/userModel.dart';
 import 'package:true_tweet/service/tweetService.dart';
+import 'package:true_tweet/userSession.dart';
 import 'package:twitter_1user/twitter_1user.dart';
 import 'tweetModel.dart';
 
 class TwitterApi {
-  static final String apiKey = 'API key';
-  static final String apiSecret = 'API secret';
-  static final String accessToken = 'Access token';
-  static final String accessSecret = 'access secret';
+  static final String apiKey = 'o1zge1Fzv6oP7JocyyjVksO6B';
+  static final String apiSecret = 'H0xDyarxRVzkAQCUIyDkI6wUYtp8DVX74VIF0occfRaSrMtchn';
+  static final String accessToken = UserSession().getAccessKey() as String;
+  static final String accessSecret = UserSession().getAccessKeySecret() as String;
+
+  static createAuthorizationObject() {
+    var platform = new oauth1.Platform(
+        'https://api.twitter.com/oauth/request_token',
+        'https://api.twitter.com/oauth/authorize',
+        'https://api.twitter.com/oauth/access_token',
+        oauth1.SignatureMethods.hmacSha1
+    );
+
+    var clientCredentials = new oauth1.ClientCredentials(apiKey, apiSecret);
+
+    return new oauth1.Authorization(clientCredentials, platform);
+  }
 
   static Future<List<Tweet>> getTimeLine() async {
     Twitter twitter = new Twitter(apiKey, apiSecret, accessToken, accessSecret);
