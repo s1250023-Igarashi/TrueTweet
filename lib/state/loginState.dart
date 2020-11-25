@@ -26,24 +26,29 @@ class LoginState extends State<Login> {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(''),
-      ),
-      body: Form(
-        key: _form,
+      body: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(labelText: 'PIN'),
-              textInputAction: TextInputAction.next,
-              onChanged: (value) {
-                verifier = value;
-              },
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: TextField(
+                decoration: InputDecoration(labelText: 'PIN'),
+                textInputAction: TextInputAction.next,
+                onChanged: (value) {
+                  verifier = value;
+                },
+              ),
             ),
             FlatButton(
-              child: Text('Login'),
+              child: Text('Login',
+                style: TextStyle(fontSize: 20),
+              ),
               color: Colors.blue,
               textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)
+              ),
               onPressed: () async {
                 auth.requestTokenCredentials(credentials, verifier).then((res) {
                   UserSession().setAccessKey(res.credentials.token);
@@ -54,7 +59,7 @@ class LoginState extends State<Login> {
                       MaterialPageRoute(builder: (context) => Home())
                   );
                 });
-              },
+              }
             ),
           ],
         ),
