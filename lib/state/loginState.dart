@@ -20,7 +20,8 @@ class LoginState extends State<Login> {
 
     auth.requestTemporaryCredentials('oob').then((res) async {
       credentials = res.credentials;
-      if (await canLaunch(auth.getResourceOwnerAuthorizationURI(credentials.token))) {
+      String a = await UserSession().getAccessKey();
+      if (a == '' && await canLaunch(auth.getResourceOwnerAuthorizationURI(credentials.token))) {
         await launch(auth.getResourceOwnerAuthorizationURI(credentials.token));
       }
     });

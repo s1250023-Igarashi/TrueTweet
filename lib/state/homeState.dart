@@ -28,102 +28,9 @@ class HomeState extends State<Home> {
     31,
     false,
   );
-  static final alice = User(
-    'Alice',
-    'alice',
-    'https://etoile.lix.jp/wp-content/uploads/2018/12/%E8%B5%A4-150x150.jpg',
-    '',
-    '',
-    14,
-    13,
-    false,
-  );
-  static final bob = User(
-      'Bob',
-      'bob',
-      'https://etoile.lix.jp/wp-content/uploads/2018/12/%E6%B5%85%E7%B8%B9-150x150.jpg',
-      '',
-      '',
-      8,
-      34,
-      false);
 
   // Tweets
-  // List<Tweet> tweets = List<Tweet>();
-  final List<Tweet> tweets = [
-    Tweet(
-      bob,
-      'content1',
-      null,
-      15,
-      false,
-      38,
-      false,
-      244,
-      '1h',
-      false,
-    ),
-    Tweet(
-      alice,
-      'content2\n\nthis is likely to be misleading information',
-      null,
-      495,
-      false,
-      193,
-      false,
-      2,
-      '2h',
-      true,
-    ),
-    Tweet(
-      bob,
-      'content3',
-      null,
-      286,
-      false,
-      66,
-      false,
-      5,
-      '3h',
-      false,
-    ),
-    Tweet(
-      alice,
-      'content4',
-      null,
-      198,
-      false,
-      43,
-      false,
-      0,
-      '4h',
-      false,
-    ),
-    Tweet(
-      loginUser,
-      'content5',
-      null,
-      34,
-      false,
-      4,
-      false,
-      0,
-      '5h',
-      false,
-    ),
-    Tweet(
-      bob,
-      'content6',
-      null,
-      150,
-      false,
-      20,
-      false,
-      3,
-      '6h',
-      false,
-    ),
-  ];
+  List<Tweet> tweets = List<Tweet>();
 
   void _changeTheme(BuildContext buildContext, ThemeKeys key) {
     if (_themeState == null) {
@@ -146,7 +53,7 @@ class HomeState extends State<Home> {
   }
 
   Future<void> load() async {
-    // tweets = await TwitterApi.getTimeLine();
+    tweets = await TwitterApi.getTimeLine();
   }
 
   Future<Null> _refresh() {
@@ -216,9 +123,7 @@ class HomeState extends State<Home> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    Wrap(
                       children: [
                         Text(tweet.user.name,
                             style: TextStyle(fontWeight: FontWeight.w600, fontSize: smallDevice ? 12 : 14)),
