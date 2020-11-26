@@ -10,8 +10,6 @@ import 'tweetModel.dart';
 class TwitterApi {
   static final String apiKey = 'o1zge1Fzv6oP7JocyyjVksO6B';
   static final String apiSecret = 'H0xDyarxRVzkAQCUIyDkI6wUYtp8DVX74VIF0occfRaSrMtchn';
-  static final String accessToken = UserSession().getAccessKey() as String;
-  static final String accessSecret = UserSession().getAccessKeySecret() as String;
 
   static createAuthorizationObject() {
     var platform = new oauth1.Platform(
@@ -27,7 +25,7 @@ class TwitterApi {
   }
 
   static Future<List<Tweet>> getTimeLine() async {
-    Twitter twitter = new Twitter(apiKey, apiSecret, accessToken, accessSecret);
+    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
 
     String response = await twitter.request('get', 'statuses/home_timeline.json', {'count': '10', 'include_entities': 'true',});
     
@@ -53,7 +51,7 @@ class TwitterApi {
           tweetsJson[i]['favorited'],
           tweetsJson[i]['retweet_count'],
           tweetsJson[i]['retweeted'],
-          tweetsJson[i]['reply_count'],
+          0, // TODO: Reply count
           '', // TODO: Timestamp
           false
       );

@@ -9,7 +9,7 @@ class UserSession {
 
   Future<String> getAccessKey() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString('access_key');
+    return sharedPreferences.getString('access_key') ?? '';
   }
 
   void setAccessKeySecret(String accessKeySecret) async {
@@ -19,7 +19,7 @@ class UserSession {
 
   Future<String> getAccessKeySecret() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString('access_key_secret');
+    return sharedPreferences.getString('access_key_secret') ?? '';
   }
 
   void setUserId(int id) async {
@@ -29,6 +29,6 @@ class UserSession {
 
   Future<int> getUserId() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getInt('user_id');
+    return sharedPreferences.getInt('user_id') ?? '';
   }
 }
