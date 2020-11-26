@@ -2,6 +2,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSession {
 
+  Future<void> logout() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+  }
+
   void setAccessKey(String accessKey) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString('access_key', accessKey);

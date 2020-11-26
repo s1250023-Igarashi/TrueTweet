@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:true_tweet/model/tweetModel.dart';
 import 'package:true_tweet/model/userModel.dart';
 import 'package:true_tweet/model/twitterApiModel.dart';
+import 'package:true_tweet/userSession.dart';
 import 'package:true_tweet/widget/composeTweet.dart';
 import 'package:true_tweet/widget/home.dart';
+import 'package:true_tweet/widget/login.dart';
 import 'package:true_tweet/widget/profile.dart';
 
 import '../theme.dart';
@@ -449,6 +451,24 @@ class HomeState extends State<Home> {
                       'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
                           '.com/o/twtr%2Ftheme.png?alt=media',
                       width: 22),
+                ),
+                SizedBox(width: 80),
+                GestureDetector(
+                  child: Text('Logout',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+
+                    UserSession().logout();
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login())
+                    );
+                  },
                 ),
                 Expanded(
                   child: Align(
