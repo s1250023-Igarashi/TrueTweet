@@ -19,15 +19,15 @@ class HomeState extends State<Home> {
   var _bottomIndex = 0;
   var _theme = 0;
 
-  // Users
-  static final loginUser = User(
-    'Login User',
-    'LoginUser',
-    'https://etoile.lix.jp/wp-content/uploads/2018/12/%E9%9D%92-1-150x150.jpg',
+  // Login User
+  static User loginUser = User(
     '',
-    'I am using this client',
-    46,
-    31,
+    '',
+    '',
+    '',
+    '',
+    0,
+    0,
     false,
   );
 
@@ -50,8 +50,13 @@ class HomeState extends State<Home> {
     Future.delayed(Duration(seconds: 0), () {
       _changeTheme(context, ThemeKeys.LIGHT);
     });
+    setLoginUserInfo();
     load();
     setState(() {});
+  }
+
+  Future<void> setLoginUserInfo() async {
+    loginUser = await TwitterApi.getLoginUser();
   }
 
   Future<void> load() async {
