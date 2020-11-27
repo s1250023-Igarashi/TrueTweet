@@ -24,6 +24,24 @@ class TwitterApi {
     return new oauth1.Authorization(clientCredentials, platform);
   }
 
+  static Future<User> getLoginUser() async {
+    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
+
+    String response = await twitter.request('get', 'account/verify_credentials.json', {});
+
+    final userJson = jsonDecode(response);
+
+    return new User(userJson['name'],
+        userJson['screen_name'],
+        userJson['profile_image_url_https'],
+        userJson['profile_banner_url'],
+        userJson['description'],
+        userJson['friends_count'],
+        userJson['followers_count'],
+        userJson['verified']
+    );
+  }
+
   static Future<List<Tweet>> getTimeLine() async {
     Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
 
