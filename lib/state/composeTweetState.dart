@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:true_tweet/model/tweetModel.dart';
+import 'package:true_tweet/model/twitterApiModel.dart';
 import 'package:true_tweet/service/tweetService.dart';
 import 'package:true_tweet/widget/composeTweet.dart';
 
@@ -42,6 +43,7 @@ class ComposeTweetState extends State<ComposeTweet> {
                                 child: Text("Tweet"),
                                 onPressed: () {
                                   Navigator.of(context).pop();
+                                  TwitterApi.tweet(_controller.text);
                                   Navigator.of(context).pop(Tweet(
                                     widget.user,
                                     '',
@@ -66,6 +68,7 @@ class ComposeTweetState extends State<ComposeTweet> {
                         },
                       );
                     } else {
+                      TwitterApi.tweet(_controller.text);
                       Navigator.of(context).pop(Tweet(
                         widget.user,
                         '',
@@ -76,7 +79,7 @@ class ComposeTweetState extends State<ComposeTweet> {
                         0,
                         false,
                         0,
-                        DateTime.now().millisecondsSinceEpoch.toString(),
+                        'just now',
                         false,
                       ));
                     }
