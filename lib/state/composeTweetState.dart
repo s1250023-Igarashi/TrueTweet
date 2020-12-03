@@ -44,6 +44,7 @@ class ComposeTweetState extends State<ComposeTweet> {
                                   Navigator.of(context).pop();
                                   Navigator.of(context).pop(Tweet(
                                     widget.user,
+                                    '',
                                     _controller.text,
                                     null,
                                     0,
@@ -67,6 +68,7 @@ class ComposeTweetState extends State<ComposeTweet> {
                     } else {
                       Navigator.of(context).pop(Tweet(
                         widget.user,
+                        '',
                         _controller.text,
                         null,
                         0,

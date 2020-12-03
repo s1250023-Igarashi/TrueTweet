@@ -201,6 +201,7 @@ class HomeState extends State<Home> {
                           onTap: tweet.retweeted
                               ? () {
                             setState(() {
+                              TwitterApi.unretweet(tweet.idStr);
                               tweet.retweets = tweet.retweets - 1;
                               tweet.retweeted = false;
                             });
@@ -220,6 +221,7 @@ class HomeState extends State<Home> {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                           setState(() {
+                                            TwitterApi.retweet(tweet.idStr);
                                             tweet.retweets = tweet.retweets + 1;
                                             tweet.retweeted = true;
                                           });
@@ -235,6 +237,7 @@ class HomeState extends State<Home> {
                               );
                             } else {
                               setState(() {
+                                TwitterApi.retweet(tweet.idStr);
                                 tweet.retweets = tweet.retweets + 1;
                                 tweet.retweeted = true;
                               });

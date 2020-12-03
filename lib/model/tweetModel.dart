@@ -2,6 +2,7 @@ import 'userModel.dart';
 
 class Tweet {
   User user;
+  String idStr;
   String tweet;
   String image;
   int likes;
@@ -12,6 +13,6 @@ class Tweet {
   bool liked;
   bool misinformation;
 
-  Tweet(this.user, this.tweet, this.image, this.likes, this.liked, this.retweets, this.retweeted, this.comments,
+  Tweet(this.user, this.idStr, this.tweet, this.image, this.likes, this.liked, this.retweets, this.retweeted, this.comments,
       this.timestamp, this.misinformation);
 }
