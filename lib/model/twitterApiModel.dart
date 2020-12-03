@@ -91,6 +91,16 @@ class TwitterApi {
     twitter.request('post', 'statuses/unretweet/' + id + '.json', {});
   }
 
+  static Future<void> favorite(String id) async {
+    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
+    twitter.request('post', 'favorites/create.json', {'id': id});
+  }
+
+  static Future<void> unfavorite(String id) async {
+    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
+    twitter.request('post', 'favorites/destroy.json', {'id': id});
+  }
+
   static Future tweet(String text) async {
     Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
     String response = await twitter.request('post', 'statuses/update.json', {'status': text});
