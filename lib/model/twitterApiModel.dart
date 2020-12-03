@@ -63,6 +63,7 @@ class TwitterApi {
       );
 
       Tweet tweet = new Tweet(user,
+          tweetsJson[i]['id_str'],
           tweetsJson[i]['text'],
           '', // TODO: Image URL
           tweetsJson[i]['favorite_count'],
@@ -78,5 +79,15 @@ class TwitterApi {
     }
 
     return tweets;
+  }
+
+  static Future<void> retweet(String id) async {
+    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
+    twitter.request('post', 'statuses/retweet/' + id + '.json', {});
+  }
+
+  static Future<void> unretweet(String id) async {
+    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
+    twitter.request('post', 'statuses/unretweet/' + id + '.json', {});
   }
 }
