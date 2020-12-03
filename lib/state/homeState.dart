@@ -283,10 +283,20 @@ class HomeState extends State<Home> {
                             ],
                           ),
                         ),
-                        Image.network(
-                          'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                              '.com/o/twtr%2Fshare.png?alt=media',
-                          width: 15,
+                        InkResponse(
+                          onTap: tweet.user == loginUser
+                              ? () {
+                            TwitterApi.deleteTweet(tweet.idStr);
+                            _refresh();
+                          }
+                              : () {
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(tweet.user == loginUser ? 'Delete' : '', style: TextStyle(fontSize: smallDevice ? 12 : 14))
+                            ],
+                          ),
                         ),
                         SizedBox()
                       ],

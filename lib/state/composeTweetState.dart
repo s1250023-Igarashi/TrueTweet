@@ -44,19 +44,23 @@ class ComposeTweetState extends State<ComposeTweet> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                   TwitterApi.tweet(_controller.text);
-                                  Navigator.of(context).pop(Tweet(
-                                    widget.user,
-                                    '',
-                                    _controller.text,
-                                    null,
-                                    0,
-                                    false,
-                                    0,
-                                    false,
-                                    0,
-                                    'just now',
-                                    true,
-                                  ));
+                                  TwitterApi.tweet(_controller.text).then((tweetJson) =>
+                                      Navigator.of(context).pop(
+                                          Tweet(
+                                              widget.user,
+                                              tweetJson['id_str'],
+                                              tweetJson['text'],
+                                              '', // TODO: Image URL
+                                              tweetJson['favorite_count'],
+                                              tweetJson['favorited'],
+                                              tweetJson['retweet_count'],
+                                              tweetJson['retweeted'],
+                                              0, // TODO: Reply count
+                                              '', // TODO: Timestamp
+                                              true
+                                          )
+                                      )
+                                  );
                                 },
                               ),
                               CupertinoDialogAction(
@@ -68,20 +72,23 @@ class ComposeTweetState extends State<ComposeTweet> {
                         },
                       );
                     } else {
-                      TwitterApi.tweet(_controller.text);
-                      Navigator.of(context).pop(Tweet(
-                        widget.user,
-                        '',
-                        _controller.text,
-                        null,
-                        0,
-                        false,
-                        0,
-                        false,
-                        0,
-                        'just now',
-                        false,
-                      ));
+                      TwitterApi.tweet(_controller.text).then((tweetJson) =>
+                        Navigator.of(context).pop(
+                          Tweet(
+                            widget.user,
+                            tweetJson['id_str'],
+                            tweetJson['text'],
+                            '', // TODO: Image URL
+                            tweetJson['favorite_count'],
+                            tweetJson['favorited'],
+                            tweetJson['retweet_count'],
+                            tweetJson['retweeted'],
+                            0, // TODO: Reply count
+                            '', // TODO: Timestamp
+                            false
+                          )
+                        )
+                      );
                     }
                   }
                       : null,
