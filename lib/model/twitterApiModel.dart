@@ -91,8 +91,15 @@ class TwitterApi {
     twitter.request('post', 'statuses/unretweet/' + id + '.json', {});
   }
 
-  static Future<void> tweet(String text) async {
+  static Future tweet(String text) async {
     Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
-    twitter.request('post', 'statuses/update.json', {'status': text});
+    String response = await twitter.request('post', 'statuses/update.json', {'status': text});
+    final tweetJson = jsonDecode(response);
+    return tweetJson;
+  }
+
+  static Future<void> deleteTweet(String id) async {
+    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
+    twitter.request('post', 'statuses/destroy/' + id + '.json', {});
   }
 }
