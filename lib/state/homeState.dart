@@ -260,12 +260,14 @@ class HomeState extends State<Home> {
                           onTap: tweet.liked
                               ? () {
                             setState(() {
+                              TwitterApi.unfavorite(tweet.idStr);
                               tweet.likes = tweet.likes - 1;
                               tweet.liked = false;
                             });
                           }
                               : () {
                             setState(() {
+                              TwitterApi.favorite(tweet.idStr);
                               tweet.likes = tweet.likes + 1;
                               tweet.liked = true;
                             });
