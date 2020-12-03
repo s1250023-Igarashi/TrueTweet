@@ -90,4 +90,9 @@ class TwitterApi {
     Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
     twitter.request('post', 'statuses/unretweet/' + id + '.json', {});
   }
+
+  static Future<void> tweet(String text) async {
+    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
+    twitter.request('post', 'statuses/update.json', {'status': text});
+  }
 }
