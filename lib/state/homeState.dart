@@ -544,7 +544,12 @@ class HomeState extends State<Home> {
                         UserSession().setHidingCriteria(_currentHidingCriteria.round());
                       });
                     },
-                  )
+                  ),
+                  SizedBox(height: 2),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text('source: http://mednlp.jp/~miyabe/rumorCloud/rumorlist.cgi', style: TextStyle(fontSize: smallDevice ? 6 : 10)),
+                  ),
                 ],
               ),
             ),
