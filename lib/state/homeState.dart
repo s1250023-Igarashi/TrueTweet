@@ -8,6 +8,8 @@ import 'package:true_tweet/widget/composeTweet.dart';
 import 'package:true_tweet/widget/home.dart';
 import 'package:true_tweet/widget/login.dart';
 import 'package:true_tweet/widget/profile.dart';
+import 'package:selectable_autolink_text/selectable_autolink_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
 
@@ -169,7 +171,17 @@ class HomeState extends State<Home> {
                       ],
                     ),
                     SizedBox(height: 4),
-                    Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14, color: tweet.misinformation && (!tweet.retweeted && tweet.user != loginUser) ? Colors.grey : Colors.black)),
+                    // TODO: solve error
+                    SelectableAutoLinkText(
+                      tweet.tweet,
+                      style: TextStyle(fontSize: smallDevice ? 12 : 14, color: tweet.misinformation && (!tweet.retweeted && tweet.user != loginUser) ? Colors.grey : Colors.black),
+                      linkStyle: TextStyle(color: Colors.blueAccent),
+                      highlightedLinkStyle: TextStyle(
+                        color: Colors.blueAccent,
+                        backgroundColor: Colors.blueAccent.withAlpha(0x33),
+                      ),
+                      onTap: (url) => launch(url, forceSafariVC: false),
+                    ),
                     if (tweet.image != null)
                       Column(
                         mainAxisSize: MainAxisSize.min,
