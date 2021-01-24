@@ -8,7 +8,7 @@ class TwitterApi {
   static final String apiKey = 'API key';
   static final String apiSecret = 'API secret';
   static final String accessToken = 'Access token';
-  static final String accessSecret = 'access secret';
+  static final String accessSecret = 'Access secret';
 
   static Future<List<Tweet>> getTimeLine() async {
     Twitter twitter = new Twitter(apiKey, apiSecret, accessToken, accessSecret);
