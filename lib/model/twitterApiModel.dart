@@ -8,8 +8,8 @@ import 'package:twitter_1user/twitter_1user.dart';
 import 'tweetModel.dart';
 
 class TwitterApi {
-  static final String apiKey = 'o1zge1Fzv6oP7JocyyjVksO6B';
-  static final String apiSecret = 'H0xDyarxRVzkAQCUIyDkI6wUYtp8DVX74VIF0occfRaSrMtchn';
+  static final String apiKey = 'API key';
+  static final String apiSecret = 'API key secret';
 
   static createAuthorizationObject() {
     var platform = new oauth1.Platform(
