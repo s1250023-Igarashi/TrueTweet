@@ -9,38 +9,7 @@ import 'tweetModel.dart';
 
 class TwitterApi {
   static final String apiKey = 'API key';
-  static final String apiSecret = 'API key secret';
-
-  static createAuthorizationObject() {
-    var platform = new oauth1.Platform(
-        'https://api.twitter.com/oauth/request_token',
-        'https://api.twitter.com/oauth/authorize',
-        'https://api.twitter.com/oauth/access_token',
-        oauth1.SignatureMethods.hmacSha1
-    );
-
-    var clientCredentials = new oauth1.ClientCredentials(apiKey, apiSecret);
-
-    return new oauth1.Authorization(clientCredentials, platform);
-  }
-
-  static Future<User> getLoginUser() async {
-    Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
-
-    String response = await twitter.request('get', 'account/verify_credentials.json', {});
-
-    final userJson = jsonDecode(response);
-
-    return new User(userJson['name'],
-        userJson['screen_name'],
-        userJson['profile_image_url_https'],
-        userJson['profile_banner_url'],
-        userJson['description'],
-        userJson['friends_count'],
-        userJson['followers_count'],
-        userJson['verified']
-    );
-  }
+  static final String apiSecret = 'API secret';
 
   static Future<List<Tweet>> getTimeLine() async {
     Twitter twitter = new Twitter(apiKey, apiSecret, await UserSession().getAccessKey(), await UserSession().getAccessKeySecret());
