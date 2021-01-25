@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:true_tweet/model/tweetModel.dart';
+import 'package:true_tweet/model/twitterApiModel.dart';
+import 'package:true_tweet/service/tweetService.dart';
 import 'package:true_tweet/widget/composeTweet.dart';
 
 class ComposeTweetState extends State<ComposeTweet> {
@@ -27,18 +29,67 @@ class ComposeTweetState extends State<ComposeTweet> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                   onPressed: _controller.text.isNotEmpty
-                      ? () {
-                    Navigator.of(context).pop(Tweet(
-                      widget.user,
-                      _controller.text,
-                      null,
-                      0,
-                      false,
-                      0,
-                      false,
-                      0,
-                      DateTime.now().millisecondsSinceEpoch.toString(),
-                    ));
+                      ? () async {
+                    if (await TweetService.containMisLeadingContent(_controller.text)) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return CupertinoAlertDialog(
+                            title: Text("Warning"),
+                            content: Text("This tweet is likely to be misinformation"),
+                            actions: <Widget>[
+                              CupertinoDialogAction(
+                                child: Text("Tweet"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  TwitterApi.tweet(_controller.text);
+                                  TwitterApi.tweet(_controller.text).then((tweetJson) =>
+                                      Navigator.of(context).pop(
+                                          Tweet(
+                                              widget.user,
+                                              tweetJson['id_str'],
+                                              tweetJson['text'],
+                                              '', // TODO: Image URL
+                                              tweetJson['favorite_count'],
+                                              tweetJson['favorited'],
+                                              tweetJson['retweet_count'],
+                                              tweetJson['retweeted'],
+                                              0, // TODO: Reply count
+                                              '', // TODO: Timestamp
+                                              true
+                                          )
+                                      )
+                                  );
+                                },
+                              ),
+                              CupertinoDialogAction(
+                                child: Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold)),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      TwitterApi.tweet(_controller.text).then((tweetJson) =>
+                        Navigator.of(context).pop(
+                          Tweet(
+                            widget.user,
+                            tweetJson['id_str'],
+                            tweetJson['text'],
+                            '', // TODO: Image URL
+                            tweetJson['favorite_count'],
+                            tweetJson['favorited'],
+                            tweetJson['retweet_count'],
+                            tweetJson['retweeted'],
+                            0, // TODO: Reply count
+                            '', // TODO: Timestamp
+                            false
+                          )
+                        )
+                      );
+                    }
                   }
                       : null,
                   child: Text('Tweet', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),

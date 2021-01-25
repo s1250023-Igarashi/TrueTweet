@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:true_tweet/model/tweetModel.dart';
 import 'package:true_tweet/model/userModel.dart';
 import 'package:true_tweet/model/twitterApiModel.dart';
+import 'package:true_tweet/userSession.dart';
 import 'package:true_tweet/widget/composeTweet.dart';
 import 'package:true_tweet/widget/home.dart';
+import 'package:true_tweet/widget/login.dart';
 import 'package:true_tweet/widget/profile.dart';
 
 import '../theme.dart';
@@ -17,26 +19,17 @@ class HomeState extends State<Home> {
   var _bottomIndex = 0;
   var _theme = 0;
 
-  // Users
-  static final geekmz = User(
-    'Mariano Zorrilla',
-    'geekmz',
-    'https://avatars2.githubusercontent.com/u/3221810?s=460&u=34b460f73429f22414f7b078ec2edcb40d580aa8&v=4',
-    'https://pbs.twimg.com/profile_banners/968284418/1578616922/1500x500',
-    'Flutter developer. I create clone apps and much more! 👨‍💻',
-    248,
-    1480,
+  // Login User
+  static User loginUser = User(
+    '',
+    '',
+    '',
+    '',
+    '',
+    0,
+    0,
     false,
   );
-  static final flutterDev = User(
-      'Flutter',
-      'FlutterDev',
-      'https://pbs.twimg.com/profile_images/1187814172307800064/MhnwJbxw_400x400.jpg',
-      'https://pbs.twimg.com/profile_banners/420730316/1578350457/1500x500',
-      'Google’s UI toolkit to build apps for mobile, web, & desktop from a single codebase //',
-      35,
-      88675,
-      true);
 
   // Tweets
   List<Tweet> tweets = List<Tweet>();
@@ -57,8 +50,13 @@ class HomeState extends State<Home> {
     Future.delayed(Duration(seconds: 0), () {
       _changeTheme(context, ThemeKeys.LIGHT);
     });
+    setLoginUserInfo();
     load();
     setState(() {});
+  }
+
+  Future<void> setLoginUserInfo() async {
+    loginUser = await TwitterApi.getLoginUser();
   }
 
   Future<void> load() async {
@@ -103,6 +101,7 @@ class HomeState extends State<Home> {
     return Column(
       children: [
         Container(
+          color: tweet.misinformation && (tweet.retweeted || tweet.user == loginUser) ? Colors.yellow : Colors.white,
           padding: const EdgeInsets.all(12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,9 +130,7 @@ class HomeState extends State<Home> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    Wrap(
                       children: [
                         Text(tweet.user.name,
                             style: TextStyle(fontWeight: FontWeight.w600, fontSize: smallDevice ? 12 : 14)),
@@ -172,7 +169,7 @@ class HomeState extends State<Home> {
                       ],
                     ),
                     SizedBox(height: 4),
-                    Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14)),
+                    Text(tweet.tweet, style: TextStyle(fontSize: smallDevice ? 12 : 14, color: tweet.misinformation && (!tweet.retweeted && tweet.user != loginUser) ? Colors.grey : Colors.black)),
                     if (tweet.image != null)
                       Column(
                         mainAxisSize: MainAxisSize.min,
@@ -204,15 +201,47 @@ class HomeState extends State<Home> {
                           onTap: tweet.retweeted
                               ? () {
                             setState(() {
+                              TwitterApi.unretweet(tweet.idStr);
                               tweet.retweets = tweet.retweets - 1;
                               tweet.retweeted = false;
                             });
                           }
                               : () {
-                            setState(() {
-                              tweet.retweets = tweet.retweets + 1;
-                              tweet.retweeted = true;
-                            });
+                            if (tweet.misinformation) {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return CupertinoAlertDialog(
+                                    title: Text("Warning"),
+                                    content: Text("This tweet is likely to be misinformation"),
+                                    actions: <Widget>[
+                                      CupertinoDialogAction(
+                                        child: Text("Retweet"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          setState(() {
+                                            TwitterApi.retweet(tweet.idStr);
+                                            tweet.retweets = tweet.retweets + 1;
+                                            tweet.retweeted = true;
+                                          });
+                                        },
+                                      ),
+                                      CupertinoDialogAction(
+                                        child: Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              setState(() {
+                                TwitterApi.retweet(tweet.idStr);
+                                tweet.retweets = tweet.retweets + 1;
+                                tweet.retweeted = true;
+                              });
+                            }
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -231,12 +260,14 @@ class HomeState extends State<Home> {
                           onTap: tweet.liked
                               ? () {
                             setState(() {
+                              TwitterApi.unfavorite(tweet.idStr);
                               tweet.likes = tweet.likes - 1;
                               tweet.liked = false;
                             });
                           }
                               : () {
                             setState(() {
+                              TwitterApi.favorite(tweet.idStr);
                               tweet.likes = tweet.likes + 1;
                               tweet.liked = true;
                             });
@@ -254,10 +285,20 @@ class HomeState extends State<Home> {
                             ],
                           ),
                         ),
-                        Image.network(
-                          'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                              '.com/o/twtr%2Fshare.png?alt=media',
-                          width: 15,
+                        InkResponse(
+                          onTap: tweet.user == loginUser
+                              ? () {
+                            TwitterApi.deleteTweet(tweet.idStr);
+                            _refresh();
+                          }
+                              : () {
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(tweet.user == loginUser ? 'Delete' : '', style: TextStyle(fontSize: smallDevice ? 12 : 14))
+                            ],
+                          ),
                         ),
                         SizedBox()
                       ],
@@ -292,7 +333,7 @@ class HomeState extends State<Home> {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            Profile(user: geekmz, list: tweets, context: context, themeState: _themeState),
+                            Profile(user: loginUser, list: tweets, context: context, themeState: _themeState),
                       ));
                     },
                     child: Container(
@@ -302,21 +343,21 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child: Image.network(geekmz.avatar, fit: BoxFit.cover),
+                        child: Image.network(loginUser.avatar, fit: BoxFit.cover),
                       ),
                     ),
                   ),
                   SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(geekmz.name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                    child: Text(loginUser.name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                   ),
                   SizedBox(height: 4),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Opacity(
                       opacity: 0.6,
-                      child: Text('@${geekmz.username}'),
+                      child: Text('@${loginUser.username}'),
                     ),
                   ),
                   SizedBox(height: 14),
@@ -325,11 +366,11 @@ class HomeState extends State<Home> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('${geekmz.following}', style: TextStyle(fontWeight: FontWeight.w600)),
+                        Text('${loginUser.following}', style: TextStyle(fontWeight: FontWeight.w600)),
                         SizedBox(width: 2),
                         Opacity(opacity: 0.6, child: Text('Following')),
                         SizedBox(width: 15),
-                        Text('${geekmz.followers}', style: TextStyle(fontWeight: FontWeight.w600)),
+                        Text('${loginUser.followers}', style: TextStyle(fontWeight: FontWeight.w600)),
                         SizedBox(width: 2),
                         Opacity(opacity: 0.6, child: Text('Followers')),
                       ],
@@ -431,6 +472,24 @@ class HomeState extends State<Home> {
                           '.com/o/twtr%2Ftheme.png?alt=media',
                       width: 22),
                 ),
+                SizedBox(width: 80),
+                GestureDetector(
+                  child: Text('Logout',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+
+                    UserSession().logout();
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login())
+                    );
+                  },
+                ),
                 Expanded(
                   child: Align(
                     alignment: Alignment.centerRight,
@@ -455,7 +514,7 @@ class HomeState extends State<Home> {
       backgroundColor: Theme.of(context).accentColor,
       onPressed: () async {
         var tweet = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ComposeTweet(context: context, user: geekmz),
+          builder: (context) => ComposeTweet(context: context, user: loginUser),
           fullscreenDialog: true,
         ));
         if (tweet != null) {
@@ -567,7 +626,7 @@ class HomeState extends State<Home> {
                       height: 30,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: Image.network(geekmz.avatar, fit: BoxFit.cover),
+                        child: Image.network(loginUser.avatar, fit: BoxFit.cover),
                       ),
                     ),
                   ),
