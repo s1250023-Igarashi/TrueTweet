@@ -78,7 +78,6 @@ class HomeState extends State<Home> {
       key: _scaffold,
       appBar: _appBar(size),
       drawer: _drawer(size),
-      bottomNavigationBar: _bottomBar(size),
       backgroundColor: Theme.of(context).primaryColorDark,
       body: RefreshIndicator(
         onRefresh: _refresh,
@@ -378,79 +377,6 @@ class HomeState extends State<Home> {
                   ),
                   SizedBox(height: 24),
                   Container(height: 1, color: Theme.of(context).selectedRowColor),
-                  SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                '.com/o/twtr%2Flists.png?alt=media',
-                            width: smallDevice ? 20 : 25),
-                        SizedBox(width: 14),
-                        Text('Lists', style: TextStyle(fontSize: smallDevice ? 14 : 18)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                '.com/o/twtr%2Ftopics.png?alt=media',
-                            width: smallDevice ? 20 : 25),
-                        SizedBox(width: 14),
-                        Text('Topics', style: TextStyle(fontSize: smallDevice ? 14 : 18)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                '.com/o/twtr%2Fbookmarks.png?alt=media',
-                            width: smallDevice ? 20 : 25),
-                        SizedBox(width: 14),
-                        Text('Bookmarks', style: TextStyle(fontSize: smallDevice ? 14 : 18)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                                '.com/o/twtr%2Fmoments.png?alt=media',
-                            width: smallDevice ? 20 : 25),
-                        SizedBox(width: 14),
-                        Text('Moments', style: TextStyle(fontSize: smallDevice ? 14 : 18)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 24),
-                  Container(height: 1, color: Theme.of(context).selectedRowColor),
-                  SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text('Settings and privacy', style: TextStyle(fontSize: smallDevice ? 14 : 18)),
-                  ),
-                  SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text('Help Center', style: TextStyle(fontSize: smallDevice ? 14 : 18)),
-                  ),
-                  SizedBox(height: 24),
                 ],
               ),
             ),
@@ -461,17 +387,6 @@ class HomeState extends State<Home> {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                SizedBox(width: 15),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    _showThemes();
-                  },
-                  child: Image.network(
-                      'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                          '.com/o/twtr%2Ftheme.png?alt=media',
-                      width: 22),
-                ),
                 SizedBox(width: 80),
                 GestureDetector(
                   child: Text('Logout',
@@ -489,15 +404,6 @@ class HomeState extends State<Home> {
                         MaterialPageRoute(builder: (context) => Login())
                     );
                   },
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot'
-                            '.com/o/twtr%2Fqrcode.png?alt=media',
-                        width: 22),
-                  ),
                 ),
                 SizedBox(width: 15),
               ],
@@ -527,81 +433,6 @@ class HomeState extends State<Home> {
           'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fcompose.png?alt=media',
           width: 30,
         ),
-      ),
-    );
-  }
-
-  Widget _bottomBar(Size size) {
-    return Container(
-      height: 56,
-      child: Column(
-        children: [
-          Container(
-            height: 1,
-            width: size.width,
-            color: Theme.of(context).selectedRowColor,
-          ),
-          Expanded(
-            child: Theme(
-              data: Theme.of(context).copyWith(canvasColor: Theme.of(context).primaryColorDark),
-              child: BottomNavigationBar(
-                items: [
-                  BottomNavigationBarItem(
-                      icon: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fhome.png?alt=media',
-                        width: 24,
-                      ),
-                      activeIcon: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fhome_selected.png?alt=media',
-                        width: 24,
-                      ),
-                      title: Text('')),
-                  BottomNavigationBarItem(
-                      icon: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fsearch'
-                            '.png?alt=media',
-                        width: 24,
-                      ),
-                      activeIcon: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fsearch_selected'
-                            '.png?alt=media',
-                        width: 24,
-                      ),
-                      title: Text('')),
-                  BottomNavigationBarItem(
-                      icon: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fnotif.png?alt=media',
-                        width: 24,
-                      ),
-                      activeIcon: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fnotif_selected'
-                            '.png?alt=media',
-                        width: 24,
-                      ),
-                      title: Text('')),
-                  BottomNavigationBarItem(
-                      icon: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fdm'
-                            '.png?alt=media',
-                        width: 24,
-                      ),
-                      activeIcon: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Fdm_selected'
-                            '.png?alt=media',
-                        width: 24,
-                      ),
-                      title: Text('')),
-                ],
-                elevation: 0,
-                currentIndex: _bottomIndex,
-                onTap: (index) => setState(() => _bottomIndex = index),
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                backgroundColor: Colors.white,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -649,21 +480,6 @@ class HomeState extends State<Home> {
                   ),
                 ),
               ),
-              Container(
-                width: 50,
-                height: 49,
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/flutter-yeti.appspot.com/o/twtr%2Ftrends.png?alt=media',
-                        width: 25,
-                      )
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
           Container(
@@ -673,111 +489,6 @@ class HomeState extends State<Home> {
           )
         ],
       ),
-    );
-  }
-
-  void _showThemes() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return SingleChildScrollView(
-          child: Container(
-            color: Colors.transparent,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColorDark,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(height: 10),
-                  Container(
-                    height: 5,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(2.5),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text('Dark Mode', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                  SizedBox(height: 10),
-                  Container(height: 1, color: Theme.of(context).selectedRowColor),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      SizedBox(width: 20),
-                      Text('Light', style: TextStyle(fontSize: 16)),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Radio(
-                            value: 0,
-                            groupValue: _theme,
-                            onChanged: (index) {
-                              setState(() => _theme = index);
-                              _changeTheme(context, ThemeKeys.LIGHT);
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Container(height: 1, color: Theme.of(context).selectedRowColor),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      SizedBox(width: 20),
-                      Text('Dark', style: TextStyle(fontSize: 16)),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Radio(
-                            value: 1,
-                            groupValue: _theme,
-                            onChanged: (index) {
-                              setState(() => _theme = index);
-                              _changeTheme(context, ThemeKeys.DARK);
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Container(height: 1, color: Theme.of(context).selectedRowColor),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      SizedBox(width: 20),
-                      Text('Darker', style: TextStyle(fontSize: 16)),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Radio(
-                            value: 2,
-                            groupValue: _theme,
-                            onChanged: (index) {
-                              setState(() => _theme = index);
-                              _changeTheme(context, ThemeKeys.DARKER);
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Container(height: 1, color: Theme.of(context).selectedRowColor),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-      backgroundColor: Colors.transparent,
     );
   }
 }
